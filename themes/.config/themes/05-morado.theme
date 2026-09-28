@@ -1,0 +1,3 @@
+NAME="Morado"
+ACCENT="#9d4edd"        # color principal
+ACCENT_BRIGHT="#c77dff" # variante clara (terminal)

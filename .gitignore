@@ -1,0 +1,25 @@
+# Secretos: nunca subir
+waybar/.config/waybar/aemet_api_key
+waybar/.config/waybar/aemet_location
+
+# Copias de seguridad sueltas (git ya guarda el historial)
+*.bak
+*.bak-*
+
+# Basura de editores
+*.swp
+*~
+
+# Colores generados por sway/scripts/theme.sh (dependen del tema activo)
+sway/.config/sway/colors.conf
+waybar/.config/waybar/colors.css
+waybar/.config/waybar/colors.jsonc
+swaync/.config/swaync/colors.css
+rofi/.config/rofi/colors.rasi
+eww/.config/eww/colors.scss
+foot/.config/foot/colors.ini
+fastfetch/.config/fastfetch/accent
+dunst/.config/dunst/dunstrc.d/
+
+# swaync: config.json se genera (plantilla config.base.json + tiempo + fecha)
+swaync/.config/swaync/config.json

@@ -1,0 +1,154 @@
+{
+  "$schema": "/etc/xdg/swaync/configSchema.json",
+  "ignore-gtk-theme": true,
+  "positionX": "right",
+  "positionY": "top",
+  "layer": "overlay",
+  "control-center-layer": "top",
+  "layer-shell": true,
+  "layer-shell-cover-screen": true,
+  "cssPriority": "user",
+  "control-center-margin-top": 10,
+  "control-center-margin-bottom": 10,
+  "control-center-margin-right": 10,
+  "control-center-margin-left": 0,
+  "notification-2fa-action": true,
+  "notification-inline-replies": false,
+  "notification-body-image-height": 100,
+  "notification-body-image-width": 200,
+  "timeout": 10,
+  "timeout-low": 5,
+  "timeout-critical": 0,
+  "fit-to-screen": true,
+  "relative-timestamps": true,
+  "control-center-width": 360,
+  "control-center-height": 600,
+  "notification-window-width": 320,
+  "keyboard-shortcuts": true,
+  "notification-grouping": true,
+  "image-visibility": "when-available",
+  "transition-time": 150,
+  "hide-on-clear": false,
+  "hide-on-action": true,
+  "text-empty": "Sin notificaciones",
+  "script-fail-notify": true,
+  "notification-visibility": {
+    "osd-volumen": {
+      "state": "transient",
+      "summary": "^Volume:"
+    },
+    "osd-brillo": {
+      "state": "transient",
+      "summary": "^Brightness:"
+    }
+  },
+  "widgets": [
+    "title",
+    "dnd",
+    "menubar#cal",
+    "buttons-grid#tiempo",
+    "buttons-grid",
+    "backlight",
+    "mpris",
+    "notifications"
+  ],
+  "widget-config": {
+    "notifications": {
+      "vexpand": true
+    },
+    "title": {
+      "text": "Notificaciones",
+      "clear-all-button": true,
+      "button-text": "Borrar todo"
+    },
+    "dnd": {
+      "text": "No molestar"
+    },
+    "mpris": {
+      "blacklist": [],
+      "autohide": true,
+      "show-album-art": "always",
+      "loop-carousel": false
+    },
+    "buttons-grid": {
+      "buttons-per-row": 4,
+      "actions": [
+        {
+          "label": "",
+          "type": "toggle",
+          "command": "~/.config/swaync/scripts/quick.sh wifi toggle",
+          "update-command": "~/.config/swaync/scripts/quick.sh wifi get"
+        },
+        {
+          "label": "",
+          "type": "toggle",
+          "command": "~/.config/swaync/scripts/quick.sh bluetooth toggle",
+          "update-command": "~/.config/swaync/scripts/quick.sh bluetooth get"
+        },
+        {
+          "label": "",
+          "type": "toggle",
+          "command": "~/.config/swaync/scripts/quick.sh mic toggle",
+          "update-command": "~/.config/swaync/scripts/quick.sh mic get"
+        },
+        {
+          "label": "",
+          "type": "toggle",
+          "command": "~/.config/swaync/scripts/quick.sh touch toggle",
+          "update-command": "~/.config/swaync/scripts/quick.sh touch get"
+        },
+        {
+          "label": "",
+          "type": "toggle",
+          "command": "~/.config/swaync/scripts/quick.sh performance toggle",
+          "update-command": "~/.config/swaync/scripts/quick.sh performance get"
+        },
+        {
+          "label": "",
+          "type": "toggle",
+          "command": "~/.config/swaync/scripts/quick.sh powersaver toggle",
+          "update-command": "~/.config/swaync/scripts/quick.sh powersaver get"
+        },
+        {
+          "label": "",
+          "command": "~/.config/swaync/scripts/quick.sh lock"
+        },
+        {
+          "label": "",
+          "command": "~/.config/swaync/scripts/quick.sh power"
+        }
+      ]
+    },
+    "buttons-grid#tiempo": {
+      "buttons-per-row": 1,
+      "actions": [
+        {
+          "label": "☁️ Tiempo",
+          "type": "toggle",
+          "command": "~/.config/swaync/scripts/quick.sh aviso toggle",
+          "update-command": "~/.config/swaync/scripts/quick.sh aviso get"
+        }
+      ]
+    },
+    "backlight": {
+      "label": "",
+      "device": "intel_backlight",
+      "subsystem": "backlight",
+      "min": 5
+    },
+    "menubar#cal": {
+      "menu#cal": {
+        "label": "  Hoy",
+        "position": "left",
+        "animation-type": "slide_down",
+        "animation-duration": 200,
+        "actions": [
+          {
+            "label": "Calendario",
+            "command": "~/.config/swaync/scripts/quick.sh calendar"
+          }
+        ]
+      }
+    }
+  }
+}

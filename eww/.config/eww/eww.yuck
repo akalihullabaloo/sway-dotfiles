@@ -1,0 +1,49 @@
+;; --- Datos por sondeo (defpoll), reutilizando ideas de los scripts de waybar ---
+
+(defpoll updates_count :interval "30m" :initial "0"
+  `dnf check-update --quiet --cacheonly 2>/dev/null | grep -cE '^\S+\.\S+\s+\S+\s+\S+$' || true`)
+
+(defpoll weather_temp :interval "10m" :initial "..."
+  `curl -s --max-time 5 "https://wttr.in/?format=%t" 2>/dev/null || echo "?"`)
+
+(defpoll uptime_str :interval "60s" :initial "..."
+  `uptime -p | sed 's/up //'`)
+
+(defpoll now_playing :interval "2s" :initial ""
+  `playerctl metadata --format '{{title}} - {{artist}}' 2>/dev/null || echo ""`)
+
+(defwindow desktop-info
+  :monitor 0
+  :geometry (geometry :x "40px"
+                       :y "90px"
+                       :width "260px"
+                       :height "1px"   ; crece con el contenido
+                       :anchor "top right")
+  :stacking "bottom"
+  :exclusive false
+  :focusable false
+  (info-widget))
+
+(defwidget info-widget []
+  (box :orientation "v" :space-evenly false :class "info-box"
+    (label :class "clock" :halign "start" :text "${formattime(EWW_TIME, '%H:%M')}")
+    (label :class "date" :halign "start" :text "${formattime(EWW_TIME, '%A, %d de %B')}   ${weather_temp}")
+    (box :class "spacer")
+    (label :class "section" :halign "start" :text "SISTEMA")
+    (label :class "line" :halign "start" :text "CPU   ${round(EWW_CPU.avg, 0)}%   (${round(EWW_TEMPS.CORETEMP_PACKAGE_ID_0, 0)}°C)")
+    (label :class "line" :halign "start" :text "RAM   ${round(EWW_RAM.used_mem_perc, 0)}%")
+    (label :class "line" :halign "start" :text "Disco ${round(EWW_DISK['/'].used_perc, 0)}%")
+    (label :class "line" :halign "start" :text "Uptime ${uptime_str}")
+    (box :class "spacer")
+    (label :class "section" :halign "start" :text "BATERIA")
+    (label :class "line" :halign "start" :text "${EWW_BATTERY.BAT0.capacity}%  (${EWW_BATTERY.BAT0.status})")
+    (box :class "spacer")
+    (label :class "section" :halign "start" :text "RED")
+    (label :class "line" :halign "start" :text "↓ ${round(EWW_NET.wlp2s0.NET_DOWN / 1024, 1)} KB/s   ↑ ${round(EWW_NET.wlp2s0.NET_UP / 1024, 1)} KB/s")
+    (box :class "spacer")
+    (label :class "section" :halign "start" :text "ACTUALIZACIONES"  :visible {updates_count != "0"})
+    (label :class "line" :halign "start" :text "${updates_count} disponibles" :visible {updates_count != "0"})
+    (box :class "spacer" :visible {now_playing != " - " && now_playing != ""})
+    (label :class "section" :halign "start" :text "REPRODUCIENDO" :visible {now_playing != " - " && now_playing != ""})
+    (label :class "line" :halign "start" :limit-width 28 :text "${now_playing}" :visible {now_playing != " - " && now_playing != ""})
+  ))

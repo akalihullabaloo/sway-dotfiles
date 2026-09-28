@@ -1,0 +1,3 @@
+NAME="Monocromo"
+ACCENT="#b3b3b3"        # color principal
+ACCENT_BRIGHT="#e0e0e0" # variante clara (terminal)

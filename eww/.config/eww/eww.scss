@@ -1,0 +1,55 @@
+// $accent lo genera ~/.config/sway/scripts/theme.sh
+@import "colors";
+
+* {
+    font-family: "JetBrains Mono";
+}
+
+window {
+    background-color: transparent;
+}
+
+.info-box {
+    background-color: transparent;
+    padding: 0px;
+}
+
+// Contorno oscuro alrededor de cada letra + halo suave: el texto se lee
+// sobre cualquier fondo sin necesidad de un recuadro
+label {
+    text-shadow:
+        1px 1px 0 rgba(0, 0, 0, 0.9),
+        -1px -1px 0 rgba(0, 0, 0, 0.9),
+        1px -1px 0 rgba(0, 0, 0, 0.9),
+        -1px 1px 0 rgba(0, 0, 0, 0.9),
+        0 0 6px rgba(0, 0, 0, 0.8);
+}
+
+.clock {
+    font-size: 32px;
+    font-weight: 700;
+    color: $accent;
+}
+
+.date {
+    font-size: 13px;
+    color: #b3b3b3;
+    margin-bottom: 10px;
+}
+
+.spacer {
+    min-height: 8px;
+}
+
+.section {
+    font-size: 13px;
+    font-weight: 700;
+    color: $accent;
+    margin-bottom: 4px;
+}
+
+.line {
+    font-size: 13px;
+    font-weight: 600;
+    color: #f0f0f0;
+}

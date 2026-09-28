@@ -1,0 +1,44 @@
+/* Selector de fondos con miniaturas (estilo HyDE).
+   Lo usa ~/.config/sway/scripts/wallpaper.sh select */
+@import "config.rasi"
+
+window {
+    width: 1120px;
+}
+
+inputbar {
+    children: [ prompt, entry ];
+}
+
+listview {
+    columns:      4;
+    lines:        2;
+    flow:         horizontal;
+    spacing:      10px;
+    fixed-height: true;
+    fixed-columns: true;
+    cycle:        false;
+}
+
+element {
+    orientation: vertical;
+    padding:     8px;
+    spacing:     6px;
+    border:      2px;
+    border-color: transparent;
+}
+
+element-icon {
+    size: 240px;
+    horizontal-align: 0.5;
+}
+
+element-text {
+    horizontal-align: 0.5;
+}
+
+element.selected.normal {
+    background-color: @bg-alt;
+    text-color:       @accent;
+    border-color:     @accent;
+}

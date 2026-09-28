@@ -1,0 +1,38 @@
+// Cabecera de foot (se lanza desde ~/.zshrc; tambien con el alias ff).
+// Paleta del tema: #0d0d0d / acento (por defecto #df6124; el del tema
+// activo se pasa con --color desde la funcion ff de ~/.zshrc)
+{
+    "$schema": "https://github.com/fastfetch-cli/fastfetch/raw/dev/doc/json_schema.json",
+    "logo": {
+        // Conejo estilo Matrix (tres verdes), generado desde una imagen de ejemplo
+        "type": "file-raw",
+        "source": "~/.config/fastfetch/conejo.txt",
+        "padding": { "top": 0, "left": 1, "right": 3 }
+    },
+    "display": {
+        "separator": "  ",
+        "color": {
+            "keys": "38;2;223;97;36",
+            "title": "38;2;223;97;36"
+        },
+        "key": { "width": 11 },
+        "size": { "binaryPrefix": "iec", "ndigits": 1 }
+    },
+    "modules": [
+        { "type": "custom", "format": "\u001b[38;2;77;77;77m──────────────────────────────" },
+        { "type": "os",       "key": "SO" },
+        { "type": "kernel",   "key": "Kernel" },
+        { "type": "uptime",   "key": "Encendido", "format": "{?days}{days} d, {?}{hours} h {minutes} min" },
+        { "type": "packages", "key": "Paquetes" },
+        { "type": "wm",       "key": "WM" },
+        { "type": "cpu",      "key": "CPU" },
+        { "type": "memory",   "key": "Memoria" },
+        { "type": "disk",     "key": "Disco", "folders": "/" },
+        { "type": "battery",  "key": "Bateria" },
+        { "type": "localip",  "key": "IP local", "showIpv6": false },
+        "break",
+        { "type": "colors", "symbol": "block" },
+        "break",
+        { "type": "custom", "format": "\u001b[1;38;2;92;255;92mQuemé mis naves, le prendí fuego a mi bandera..." }
+    ]
+}

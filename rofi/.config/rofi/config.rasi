@@ -1,0 +1,125 @@
+configuration {
+    show-icons: true;
+    icon-theme: "Papirus-Dark";
+    display-drun: "Apps";
+    display-run: "Run";
+    display-combi: "";
+}
+
+* {
+    bg:       #0d0d0dee;
+    bg-alt:   #1a1a1a;
+    fg:       #e0e0e0;
+
+    background-color: transparent;
+    text-color:        @fg;
+    font: "JetBrains Mono 11";
+}
+
+window {
+    background-color: @bg;
+    border:            1px;
+    border-color:      @border-c;
+    border-radius:     0px;
+    width:              600px;
+    padding:            0px;
+}
+
+mainbox {
+    background-color: transparent;
+    padding: 10px;
+    spacing: 10px;
+}
+
+inputbar {
+    background-color: @bg-alt;
+    text-color:        @fg;
+    padding:            8px 10px;
+    spacing:            8px;
+    border:             0px 0px 2px 0px;
+    border-color:       @accent;
+}
+
+prompt {
+    text-color: @accent;
+}
+
+entry {
+    text-color:        @fg;
+    placeholder:        "Buscar...";
+    placeholder-color: #808080;
+}
+
+case-indicator {
+    text-color: @fg;
+}
+
+listview {
+    background-color: transparent;
+    lines:              8;
+    spacing:            2px;
+    fixed-height:       false;
+    scrollbar:          false;
+}
+
+element {
+    background-color: transparent;
+    text-color:         @fg;
+    padding:             6px 8px;
+    border-radius:       0px;
+}
+
+element-icon {
+    size: 22px;
+}
+
+element-text {
+    background-color: inherit;
+    text-color:         inherit;
+}
+
+element.normal.normal {
+    background-color: transparent;
+    text-color:         @fg;
+}
+
+element.selected.normal {
+    background-color: @accent;
+    text-color:         #0d0d0d;
+}
+
+element.alternate.normal {
+    background-color: transparent;
+    text-color:         @fg;
+}
+
+mode-switcher {
+    background-color: @bg-alt;
+    spacing:            2px;
+}
+
+button {
+    background-color: transparent;
+    text-color:         #808080;
+    padding:             6px;
+    border:              0px 0px 2px 0px;
+    border-color:       transparent;
+}
+
+button.selected {
+    text-color:   @accent;
+    border-color: @accent;
+}
+
+message {
+    background-color: @bg-alt;
+    border:              0px;
+    padding:             6px;
+}
+
+textbox {
+    text-color: @fg;
+}
+
+/* accent y border-c: los genera ~/.config/sway/scripts/theme.sh */
+@import "colors.rasi"

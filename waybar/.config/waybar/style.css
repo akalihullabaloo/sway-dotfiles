@@ -1,0 +1,383 @@
+@define-color bg #0d0d0d;
+@define-color fg #e0e0e0;
+/* @accent lo genera ~/.config/sway/scripts/theme.sh */
+@import "colors.css";
+@define-color danger #f53c3c;
+@define-color good #25e712;
+
+* {
+    font-family: 'JetBrains Mono', 'Font Awesome 6 Free', 'Font Awesome 6 Brands', 'JetBrainsMono Nerd Font', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    border: none;
+    border-radius: 0;
+    margin: 0;
+}
+
+window#waybar {
+    background-color: transparent;
+}
+
+window#waybar.hidden {
+    opacity: 0.2;
+}
+
+#waybar > box {
+    margin: 0;
+    padding: 0 10px;
+    min-height: 34px;
+    border-radius: 0;
+    background-color: @bg;
+    border-bottom: 1px solid alpha(@accent, 0.4);
+}
+
+button {
+    box-shadow: inset 0 -3px transparent;
+    border: none;
+    border-radius: 0;
+    transition: 0.2s ease-in-out;
+}
+
+button:hover {
+    background: inherit;
+}
+
+/* --- workspaces: underline style instead of solid block --- */
+#workspaces {
+    padding: 0;
+    margin: 0;
+}
+
+#workspaces button {
+    padding: 0 1px;
+    color: @fg;
+    opacity: 0.6;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    background: transparent;
+}
+
+#workspaces button.focused,
+#workspaces button.active {
+    opacity: 1;
+    color: @accent;
+    border-bottom: 2px solid @accent;
+}
+
+#workspaces button:hover {
+    opacity: 1;
+    color: @accent;
+    border-bottom: 2px solid alpha(@accent, 0.5);
+    background: transparent;
+}
+
+#workspaces button.urgent {
+    color: @danger;
+    border-bottom: 2px solid @danger;
+}
+
+#mode {
+    color: @accent;
+    font-style: italic;
+    padding: 0 1px;
+}
+
+#window {
+    color: alpha(@fg, 0.8);
+    font-style: italic;
+}
+
+#clock,
+#battery,
+#custom-battery,
+#cpu,
+#memory,
+#disk,
+#temperature,
+#backlight,
+#network,
+#pulseaudio,
+#wireplumber,
+#custom-media,
+#custom-mpris-marquee,
+#tray,
+#idle_inhibitor,
+#scratchpad,
+#power-profiles-daemon,
+#language,
+#keyboard-state,
+#mpd {
+    padding: 0 1px;
+    color: @fg;
+}
+
+#custom-separator {
+    color: alpha(@fg, 0.25);
+    padding: 0 2px;
+    font-weight: 400;
+}
+
+#custom-weather {
+    color: @accent;
+    padding: 0 1px;
+}
+
+#custom-aemet-avisos {
+    padding: 0 1px;
+}
+
+#custom-aemet-avisos.amarillo {
+    color: #e8c547;
+}
+
+#custom-aemet-avisos.naranja {
+    color: @accent;
+}
+
+#custom-aemet-avisos.rojo {
+    color: @danger;
+    font-weight: 700;
+}
+
+#custom-mpris-marquee.playing {
+    color: @accent;
+}
+
+#custom-mpris-marquee {
+    min-width: 170px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+#custom-keybinds {
+    color: @fg;
+    padding: 0 1px;
+}
+
+#custom-keybinds:hover {
+    color: @accent;
+}
+
+#window,
+#workspaces {
+    margin: 0 4px;
+}
+
+.modules-left > widget:first-child > #workspaces {
+    margin-left: 0;
+}
+
+.modules-right > widget:last-child > #workspaces {
+    margin-right: 0;
+}
+
+#clock {
+    color: @accent;
+    font-weight: 700;
+    font-size: 15px;    /* igual que #custom-battery */
+}
+
+#custom-battery {
+    color: @fg;
+    font-size: 15px;
+}
+
+#custom-battery.charging,
+#custom-battery.plugged {
+    color: @good;
+}
+
+#custom-battery.warning {
+    color: @accent;
+}
+
+@keyframes blink {
+    to {
+        color: @danger;
+    }
+}
+
+#custom-battery.critical {
+    color: @danger;
+    animation-name: blink;
+    animation-duration: 0.5s;
+    animation-timing-function: steps(12);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+#power-profiles-daemon.performance {
+    color: @danger;
+}
+
+#power-profiles-daemon.balanced {
+    color: @fg;
+}
+
+#power-profiles-daemon.power-saver {
+    color: @good;
+}
+
+#cpu.warning,
+#memory.warning {
+    color: @accent;
+}
+
+#cpu.critical,
+#memory.critical {
+    color: @danger;
+}
+
+#backlight {
+    color: @fg;
+}
+
+#custom-updates {
+    color: @accent;
+    padding: 0 1px;
+}
+
+#custom-updates:hover {
+    color: #66ff99;
+}
+
+#custom-network {
+    color: @fg;
+    padding: 0 1px;
+}
+
+#custom-network.disconnected {
+    color: @danger;
+}
+
+#pulseaudio {
+    color: @fg;
+}
+
+#pulseaudio.muted {
+    color: @danger;
+}
+
+#custom-mic {
+    color: @fg;
+    padding: 0 1px;
+}
+
+#custom-mic.muted {
+    color: @danger;
+}
+
+#custom-mic.unmuted {
+    color: @good;
+}
+
+#custom-webcam {
+    color: alpha(@fg, 0.35);
+    padding: 0 1px;
+}
+
+#custom-webcam.active {
+    color: @good;
+}
+
+#temperature {
+    color: @fg;
+}
+
+#temperature.critical {
+    color: @danger;
+}
+
+#tray {
+    background-color: transparent;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: @danger;
+}
+
+#idle_inhibitor {
+    color: alpha(@fg, 0.4);
+}
+
+#idle_inhibitor.activated {
+    color: @accent;
+}
+
+#language {
+    color: @fg;
+    padding: 0 4px;
+    margin: 0 4px;
+    min-width: 16px;
+}
+
+#keyboard-state {
+    color: @fg;
+    padding: 0;
+    margin: 0 4px;
+    min-width: 16px;
+}
+
+#keyboard-state > label {
+    padding: 0 4px;
+}
+
+#keyboard-state > label.locked {
+    color: @accent;
+}
+
+#scratchpad {
+    color: alpha(@fg, 0.6);
+}
+
+#scratchpad.empty {
+    color: alpha(@fg, 0.2);
+}
+
+tooltip {
+    padding: 4px;
+    background: @bg;
+    border: 1px solid alpha(@fg, 0.2);
+    border-radius: 6px;
+}
+
+tooltip label {
+    color: @fg;
+    font-weight: 400;
+}
+
+#custom-notifications {
+    color: @fg;
+    padding: 0 1px;
+}
+
+#custom-notifications.none,
+#custom-notifications.inhibited-none {
+    opacity: 0.5;
+}
+
+#custom-notifications.notification:hover,
+#custom-notifications.dnd-none,
+#custom-notifications.dnd-notification,
+#custom-notifications.dnd-inhibited-none,
+#custom-notifications.dnd-inhibited-notification,
+#custom-notifications.cc-open {
+    color: @accent;
+}
+
+/* Aviso de festivo (solo visible si hoy o mañana lo es) */
+#custom-festivo {
+    padding: 0 4px 0 1px;
+}
+
+#custom-festivo.hoy {
+    color: @accent;
+}
+
+#custom-festivo.manana {
+    color: alpha(@fg, 0.7);
+}

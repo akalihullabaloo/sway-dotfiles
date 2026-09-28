@@ -1,0 +1,3 @@
+NAME="Azul"
+ACCENT="#3391ff"        # color principal
+ACCENT_BRIGHT="#66b3ff" # variante clara (terminal)

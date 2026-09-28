@@ -1,0 +1,3 @@
+NAME="Menta"
+ACCENT="#2ec4a0"        # color principal
+ACCENT_BRIGHT="#5eead4" # variante clara (terminal)

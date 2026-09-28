@@ -1,0 +1,3 @@
+NAME="Rojo"
+ACCENT="#e5383b"        # color principal
+ACCENT_BRIGHT="#ff6b6b" # variante clara (terminal)

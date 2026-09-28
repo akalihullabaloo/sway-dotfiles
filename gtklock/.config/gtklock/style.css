@@ -1,0 +1,65 @@
+window {
+    background-image: none;
+    background-color: black;
+}
+
+#window-box {
+    background-color: rgba(0, 0, 0, 0.55);
+    border: 1px solid #1f8a3c;
+    padding: 30px;
+}
+
+#clock-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 64px;
+    font-weight: 700;
+    color: #00ff41;
+}
+
+#date-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    color: #1f8a3c;
+}
+
+#input-label {
+    font-family: 'JetBrains Mono', monospace;
+    color: #00ff41;
+    font-weight: 700;
+}
+
+#input-field {
+    font-family: 'JetBrains Mono', monospace;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #00ff41;
+    border: 1px solid #00ff41;
+    border-radius: 0;
+    caret-color: #00ff41;
+    padding: 6px 10px;
+}
+
+#input-field:focus {
+    border-color: #66ff99;
+    box-shadow: 0 0 8px rgba(0, 255, 65, 0.5);
+}
+
+#warning-label,
+#error-label {
+    font-family: 'JetBrains Mono', monospace;
+    color: #ff3333;
+    font-weight: 700;
+}
+
+#unlock-button {
+    font-family: 'JetBrains Mono', monospace;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: #00ff41;
+    border: 1px solid #00ff41;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+#unlock-button:hover {
+    background-color: rgba(0, 255, 65, 0.15);
+    color: #66ff99;
+}

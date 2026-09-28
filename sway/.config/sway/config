@@ -1,0 +1,320 @@
+# Default config for sway
+#
+# Copy this to ~/.config/sway/config and edit it to your liking.
+#
+# Read `man 5 sway` for a complete reference.
+
+### Variables
+#
+# Logo key. Use Mod1 for Alt.
+set $mod Mod4
+# Home row direction keys, like vim
+set $left h
+set $down j
+set $up k
+set $right l
+# Your preferred terminal emulator
+# Recommends: foot
+set $term foot
+# Your preferred application launcher
+# Note: pass the final command to swaymsg so that the resulting window can be opened
+# on the original workspace that the command was run on.
+# Recommends: rofi-wayland
+set $rofi_cmd rofi \
+        -terminal '$term'
+# Shows a combined list of the applications with desktop files and
+# executables from PATH.
+# TODO: add window with the next release of rofi-wayland
+set $menu $rofi_cmd -show combi -combi-modes drun#run -modes combi
+
+### Output configuration
+#
+# Default wallpaper (more resolutions are available in /usr/share/backgrounds/sway/)
+# Requires: desktop-backgrounds-compat, swaybg, jxl-pixbuf-loader
+# Ultimo fondo elegido (atajos Super+Alt) o el de Azote si es mas reciente
+exec ~/.config/sway/scripts/wallpaper.sh restore
+#
+
+# Widget de info en el escritorio (eww, capa de fondo)
+exec "eww daemon; sleep 1; eww open desktop-info"
+# Example configuration:
+#
+#   output HDMI-A-1 resolution 1920x1080 position 1920,0
+#
+# You can get the names of your outputs by running: swaymsg -t get_outputs
+
+### Idle configuration
+#
+# Example configuration:
+#
+# exec swayidle -w \
+#          timeout 300 'swaylock -f -c 000000' \
+#          timeout 600 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
+#          before-sleep 'swaylock -f -c 000000'
+#
+# This will lock your screen after 300 seconds of inactivity, then turn off
+# your displays after another 300 seconds, and turn your screens back on when
+# resumed. It will also lock your screen before your computer goes to sleep.
+
+### Input configuration
+#
+# Example configuration:
+#
+#   input "2:14:SynPS/2_Synaptics_TouchPad" {
+#       dwt enabled
+#       tap enabled
+#       natural_scroll enabled
+#       middle_emulation enabled
+#   }
+#
+# You can get the names of your inputs by running: swaymsg -t get_inputs
+# Read `man 5 sway-input` for more information about this section.
+
+### Key bindings
+#
+# Basics:
+#
+    # Start a terminal
+    bindsym $mod+Return exec $term
+
+    # Kill focused window
+    bindsym $mod+Shift+q kill
+
+    # Start your launcher
+    bindsym $mod+d exec $menu
+
+    # Drag floating windows by holding down $mod and left mouse button.
+    # Resize them with right mouse button + $mod.
+    # Despite the name, also works for non-floating windows.
+    # Change normal to inverse to use left mouse button for resizing and right
+    # mouse button for dragging.
+    floating_modifier $mod normal
+
+    # Reload the configuration file
+    bindsym $mod+Shift+c reload
+
+    # Exit sway (logs you out of your Wayland session)
+    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -B 'Yes, exit sway' 'swaymsg exit'
+#
+# Moving around:
+#
+    # Move your focus around
+    bindsym $mod+$left focus left
+    bindsym $mod+$down focus down
+    bindsym $mod+$up focus up
+    bindsym $mod+$right focus right
+    # Or use $mod+[up|down|left|right]
+    bindsym $mod+Left focus left
+    bindsym $mod+Down focus down
+    bindsym $mod+Up focus up
+    bindsym $mod+Right focus right
+
+    # Move the focused window with the same, but add Shift
+    bindsym $mod+Shift+$left move left
+    bindsym $mod+Shift+$down move down
+    bindsym $mod+Shift+$up move up
+    bindsym $mod+Shift+$right move right
+    # Ditto, with arrow keys
+    bindsym $mod+Shift+Left move left
+    bindsym $mod+Shift+Down move down
+    bindsym $mod+Shift+Up move up
+    bindsym $mod+Shift+Right move right
+#
+# Workspaces:
+#
+    # Switch to workspace
+    bindsym $mod+1 workspace number 1
+    bindsym $mod+2 workspace number 2
+    bindsym $mod+3 workspace number 3
+    bindsym $mod+4 workspace number 4
+    bindsym $mod+5 workspace number 5
+    bindsym $mod+6 workspace number 6
+    bindsym $mod+7 workspace number 7
+    bindsym $mod+8 workspace number 8
+    bindsym $mod+9 workspace number 9
+    bindsym $mod+0 workspace number 10
+    # Move focused container to workspace
+    bindsym $mod+Shift+1 move container to workspace number 1
+    bindsym $mod+Shift+2 move container to workspace number 2
+    bindsym $mod+Shift+3 move container to workspace number 3
+    bindsym $mod+Shift+4 move container to workspace number 4
+    bindsym $mod+Shift+5 move container to workspace number 5
+    bindsym $mod+Shift+6 move container to workspace number 6
+    bindsym $mod+Shift+7 move container to workspace number 7
+    bindsym $mod+Shift+8 move container to workspace number 8
+    bindsym $mod+Shift+9 move container to workspace number 9
+    bindsym $mod+Shift+0 move container to workspace number 10
+    # Note: workspaces can have any name you want, not just numbers.
+    # We just use 1-10 as the default.
+#
+# Layout stuff:
+#
+    # You can "split" the current object of your focus with
+    # $mod+b or $mod+v, for horizontal and vertical splits
+    # respectively.
+    bindsym $mod+b splith
+    bindsym $mod+v splitv
+
+    # Switch the current container between different layout styles
+    bindsym $mod+s layout stacking
+    bindsym $mod+w layout tabbed
+    bindsym $mod+e layout toggle split
+
+    # Make the current focus fullscreen
+    bindsym $mod+f fullscreen
+
+    # Toggle the current focus between tiling and floating mode
+    bindsym $mod+Shift+space floating toggle
+
+    # Swap focus between the tiling area and the floating area
+    bindsym $mod+space focus mode_toggle
+
+    # Move focus to the parent container
+    bindsym $mod+a focus parent
+#
+# Scratchpad:
+#
+    # Sway has a "scratchpad", which is a bag of holding for windows.
+    # You can send windows there and get them back later.
+
+    # Move the currently focused window to the scratchpad
+    bindsym $mod+Shift+minus move scratchpad
+
+    # Show the next scratchpad window or hide the focused scratchpad window.
+    # If there are multiple scratchpad windows, this command cycles through them.
+    bindsym $mod+minus scratchpad show
+#
+# Resizing containers:
+#
+mode "resize" {
+    # left will shrink the containers width
+    # right will grow the containers width
+    # up will shrink the containers height
+    # down will grow the containers height
+    bindsym $left resize shrink width 10px
+    bindsym $down resize grow height 10px
+    bindsym $up resize shrink height 10px
+    bindsym $right resize grow width 10px
+
+    # Ditto, with arrow keys
+    bindsym Left resize shrink width 10px
+    bindsym Down resize grow height 10px
+    bindsym Up resize shrink height 10px
+    bindsym Right resize grow width 10px
+
+    # Return to default mode
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+bindsym $mod+r mode "resize"
+
+# Include configs from 3 locations:
+#  - /usr/share/sway/config.d
+#  - /etc/sway/config.d
+#  - $XDG_CONFIG_HOME/sway/config.d ($HOME/.config/sway/config.d)
+#
+# If multiple directories contain the files with the same name, the later
+# directory takes precedence; `$XDG_CONFIG_HOME/sway/config.d/20-swayidle.conf`
+# will always be loaded instead of `/usr/share/sway/config.d/20-swayidle.conf`
+# or `/etc/sway/config.d/20-swayidle.conf`
+#
+# This mechanism permits overriding our default configuration per-system
+# (/etc) or per-user ($XDG_CONFIG_HOME) basis. Just create the file you
+# want to modify/override in the higher-level directory.
+#
+# For example, to disable the default bar from Fedora configs, you'll need to
+#     $ echo -n > "$HOME/.config/sway/config.d/90-bar.conf"
+#
+# Note the quoting, the $() and the arguments quoting. All the parts are equally
+# important to make the magic work. And if you want to learn the secret behind
+# the trick, it's all in the `wordexp(3)`.
+#
+include '$(/usr/libexec/sway/layered-include "/usr/share/sway/config.d/*.conf" "/etc/sway/config.d/*.conf" "${XDG_CONFIG_HOME:-$HOME/.config}/sway/config.d/*.conf")'
+
+# Para el teclado en español
+input type:keyboard {
+	xkb_layout es
+}
+
+# Touchpad: tocar ligero hace clic, sin necesidad de presionar fuerte
+input type:touchpad {
+	tap enabled
+}
+
+# Pantalla tactil (panel ELAN2933, XPS 13 7390)
+input type:touch {
+	events enabled
+}
+
+# Bloquear pantalla manualmente
+bindsym $mod+Shift+Escape exec loginctl lock-session
+
+# Menu de energia: Bloquear | Apagar | Reiniciar | Hibernar
+bindsym Ctrl+Mod1+Delete exec ~/.config/sway/scripts/power-menu.sh
+
+# Silenciar/activar microfono (el XPS 13 7390 no tiene tecla fisica para esto)
+bindsym $mod+Shift+m exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+
+# Activar/desactivar la pantalla tactil manualmente (libinput no soporta
+# desactivarla sola al conectar un raton externo en este panel)
+bindsym $mod+Shift+t exec swaymsg input type:touch events toggle
+
+# Abrir gestor de archivos
+bindsym $mod+t exec thunar
+
+# Notificaciones (swaync): panel lateral y No molestar
+bindsym $mod+n exec swaync-client -t -sw
+bindsym $mod+Shift+n exec swaync-client -d -sw
+
+# Captura de area con anotaciones (satty): selecciona con slurp, anota, y
+# guarda en ~/Imagenes ademas de copiar al portapapeles al pulsar Enter.
+bindsym $mod+Print exec grim -g "$(slurp)" - | ~/.local/bin/satty --filename - --output-filename ~/Imágenes/satty-%Y%m%d-%H%M%S.png --copy-command wl-copy --actions-on-enter save-to-file
+
+# Lupa (wl-mirror): selecciona una zona con slurp y la muestra ampliada en una
+# ventana flotante. Rueda del raton = zoom, arrastrar = pan dentro de la ventana.
+bindsym $mod+Shift+Print exec wl-mirror --region "$(slurp)"
+for_window [app_id="wl-mirror"] floating enable, resize set 480 320, move position 20 20
+
+# Popup de la chuleta de atajos (waybar custom/keybinds)
+# Super+F1 la abre; si ya esta abierta, la cierra (toggle)
+bindsym $mod+F1 exec sh -c 'swaymsg -q "[app_id=keybinds-popup] kill" || foot --app-id=keybinds-popup --title="Atajos de teclado" -e sh -c "sleep 0.15; less -R $HOME/.config/waybar/keybindings.txt"'
+for_window [app_id="keybinds-popup"] floating enable, resize set 700 750, move position center, border pixel 2
+
+# Popup del pronostico completo del tiempo (waybar custom/weather). Sin
+# resize set: el tamano lo decide weather-popup-launch.sh segun el
+# contenido (--window-size-chars), aqui solo se centra y flota.
+for_window [app_id="weather-popup"] floating enable, move position center, border pixel 2
+
+# Popup del calendario anual (boton del panel de swaync)
+for_window [app_id="calendar-popup"] floating enable, move position center, border pixel 2
+
+# Editor de anotaciones satty siempre flotante y centrado
+for_window [app_id="com.gabm.satty"] floating enable, move position center, border pixel 2
+
+# Sin barra de titulo (waybar ya muestra el titulo de la ventana), borde fino
+default_border pixel 2
+default_floating_border pixel 2
+
+# Espacio entre ventanas y con el borde de la pantalla
+gaps inner 5
+gaps outer 4
+
+# Colores de borde a juego con waybar (acento naranja sobre negro)
+#                       border    background text     indicator child_border
+# Color de acento: lo genera scripts/theme.sh (Super+Alt+T)
+set $accent #df6124
+include ~/.config/sway/colors.conf
+client.focused          $accent   #0d0d0d    #e0e0e0  $accent   $accent
+client.focused_inactive #4d4d4d   #0d0d0d    #808080  #4d4d4d   #4d4d4d
+client.unfocused        #262626   #0d0d0d    #808080  #262626   #262626
+client.urgent           #f53c3c   #0d0d0d    #ffffff  #f53c3c   #f53c3c
+client.placeholder      #262626   #0d0d0d    #808080  #262626   #262626
+
+### Fondo de pantalla (carpeta ~/Imágenes/Fondos)
+bindsym $mod+Mod1+Right exec ~/.config/sway/scripts/wallpaper.sh next
+bindsym $mod+Mod1+Left  exec ~/.config/sway/scripts/wallpaper.sh prev
+bindsym $mod+Mod1+r     exec ~/.config/sway/scripts/wallpaper.sh random
+bindsym $mod+Mod1+w     exec ~/.config/sway/scripts/wallpaper.sh select
+
+### Tema de color (acento de todo el escritorio)
+bindsym $mod+Mod1+t     exec ~/.config/sway/scripts/theme.sh

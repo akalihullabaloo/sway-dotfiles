@@ -1,0 +1,142 @@
+@import "colors.css"; /* --accent: lo genera ~/.config/sway/scripts/theme.sh */
+
+/* Se carga despues de /etc/xdg/swaync/style.css: solo sobreescribe la paleta (misma que waybar/dunst). */
+
+:root {
+  --cc-bg: rgba(13, 13, 13, 0.95);
+  --noti-border-color: var(--accent);
+  --noti-bg: 13, 13, 13;
+  --noti-bg-alpha: 1;
+  --noti-bg-darker: rgb(8, 8, 8);
+  --noti-bg-hover: rgb(30, 30, 30);
+  --noti-bg-focus: alpha(var(--accent), 0.15);
+  --noti-close-bg: rgb(40, 40, 40);
+  --noti-close-bg-hover: var(--accent);
+  --text-color: #e0e0e0;
+  --text-color-disabled: #808080;
+  --bg-selected: var(--accent);
+  --notification-icon-size: 40px;
+  --border: 2px solid var(--noti-border-color);
+  --border-radius: 0;
+  --notification-shadow: none;
+  --font-size-body: 12px;
+  --font-size-summary: 12px;
+}
+
+* {
+  font-family: 'JetBrains Mono', 'Font Awesome 6 Free', monospace;
+}
+
+.notification-row .notification-background .notification.critical {
+  border-color: #f53c3c;
+}
+
+.control-center {
+  border: 1px solid alpha(var(--accent), 0.4);
+}
+
+.widget-dnd switch:checked {
+  background: var(--accent);
+}
+
+/* Botones rapidos */
+.widget-buttons-grid {
+  padding: 6px 8px;
+}
+
+.widget-buttons-grid flowboxchild > button {
+  font-family: 'Font Awesome 6 Free', 'Font Awesome 6 Brands';
+  font-size: 13px;
+  min-height: 24px;
+  padding: 2px 0;
+  background: rgb(30, 30, 30);
+  color: #e0e0e0;
+  border: 1px solid alpha(var(--accent), 0.3);
+}
+
+.widget-buttons-grid flowboxchild > button:hover {
+  border-color: var(--accent);
+}
+
+.widget-buttons-grid flowboxchild > button.toggle:checked {
+  background: var(--accent);
+  color: #0d0d0d;
+}
+
+/* Boton del tiempo (buttons-grid#tiempo): naranja si hay aviso AEMET activo */
+.widget-buttons-grid.tiempo flowboxchild > button {
+  font-family: 'JetBrains Mono', 'Noto Color Emoji', monospace;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.widget-buttons-grid.tiempo flowboxchild > button.toggle:checked {
+  background: rgb(30, 30, 30);
+  color: var(--accent);
+  border: 2px solid var(--accent);
+}
+
+/* Slider de brillo */
+.widget-backlight {
+  padding: 4px 8px;
+}
+
+.widget-backlight label {
+  font-family: 'Font Awesome 6 Free';
+  font-size: 14px;
+  margin-right: 8px;
+}
+
+.widget-backlight scale trough {
+  background: rgb(30, 30, 30);
+  min-height: 6px;
+}
+
+.widget-backlight scale highlight {
+  background: var(--accent);
+}
+
+.widget-backlight scale slider {
+  background: #e0e0e0;
+}
+
+/* Calendario desplegable (menubar#cal) */
+.widget-menubar.cal {
+  padding: 0;
+  margin: 0 0 0 7px;
+}
+
+.widget-menubar.cal button {
+  font-family: 'JetBrains Mono', 'Font Awesome 6 Free', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  background: rgb(30, 30, 30);
+  color: #e0e0e0;
+  border: 1px solid alpha(var(--accent), 0.3);
+  border-radius: 0;
+  padding: 3px 12px;
+  min-height: 0;
+  min-width: 296px;
+}
+
+.widget-menubar.cal button:hover {
+  border-color: var(--accent);
+}
+
+/* Tamanos compactos para los widgets de serie */
+.widget-title > label { font-size: 15px; }
+.widget-title > button { font-size: 12px; padding: 2px 8px; }
+.widget-dnd label { font-size: 13px; }
+.widget-mpris .widget-mpris-player .mpris-overlay .widget-mpris-title { font-size: 13px; }
+.widget-mpris .widget-mpris-player .mpris-overlay .widget-mpris-subtitle { font-size: 12px; }
+.notification-row .notification-background .notification .notification-default-action .notification-content .text-box .time { font-size: 11px; }
+
+/* Alturas compactas: tiempo, rejillas, slider y cabecera */
+.widget-buttons-grid.tiempo flowboxchild > button { min-height: 24px; padding: 3px 0; }
+.widget-buttons-grid { padding: 3px 8px; }
+.widget-buttons-grid flowbox { margin: 0; }
+.widget-backlight { padding: 0 8px; }
+.widget-backlight scale { padding: 4px 0; }
+.widget-dnd { margin-top: 2px; margin-bottom: 2px; }
+.widget-dnd switch { min-height: 18px; }
+.widget-title { margin-top: 6px; margin-bottom: 2px; }
