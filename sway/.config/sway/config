@@ -76,9 +76,12 @@ exec "eww daemon; sleep 1; eww open desktop-info"
 #
     # Start a terminal
     bindsym $mod+Return exec $term
+    # foot con pestañas y divisiones (tmux, atajos Alt+…)
+    bindsym $mod+Shift+Return exec ~/.config/sway/scripts/foot-tmux.sh
 
     # Kill focused window
-    bindsym $mod+Shift+q kill
+    # Cerrar ventana; en foot-tmux pide confirmación
+    bindsym $mod+Shift+q exec ~/.config/sway/scripts/kill-confirm.sh
 
     # Start your launcher
     bindsym $mod+d exec $menu
@@ -241,9 +244,10 @@ input type:touchpad {
 	tap enabled
 }
 
-# Pantalla tactil (panel ELAN2933, XPS 13 7390)
+# Pantalla tactil (panel ELAN2933, XPS 13 7390): desactivada por defecto,
+# se activa a mano con Super+Shift+T. Al recargar sway vuelve a desactivarse.
 input type:touch {
-	events enabled
+	events disabled
 }
 
 # Bloquear pantalla manualmente
@@ -257,7 +261,7 @@ bindsym $mod+Shift+m exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
 
 # Activar/desactivar la pantalla tactil manualmente (libinput no soporta
 # desactivarla sola al conectar un raton externo en este panel)
-bindsym $mod+Shift+t exec swaymsg input type:touch events toggle
+bindsym $mod+Shift+t exec ~/.config/sway/scripts/touch-toggle.sh
 
 # Abrir gestor de archivos
 bindsym $mod+t exec thunar
@@ -277,8 +281,8 @@ for_window [app_id="wl-mirror"] floating enable, resize set 480 320, move positi
 
 # Popup de la chuleta de atajos (waybar custom/keybinds)
 # Super+F1 la abre; si ya esta abierta, la cierra (toggle)
-bindsym $mod+F1 exec sh -c 'swaymsg -q "[app_id=keybinds-popup] kill" || foot --app-id=keybinds-popup --title="Atajos de teclado" -e sh -c "sleep 0.15; less -R $HOME/.config/waybar/keybindings.txt"'
-for_window [app_id="keybinds-popup"] floating enable, resize set 700 750, move position center, border pixel 2
+bindsym $mod+F1 exec ~/.config/sway/scripts/keybinds.sh
+for_window [app_id="keybinds-popup"] floating enable, resize set 1280 780, move position center, border pixel 2
 
 # Popup del pronostico completo del tiempo (waybar custom/weather). Sin
 # resize set: el tamano lo decide weather-popup-launch.sh segun el
@@ -290,6 +294,9 @@ for_window [app_id="calendar-popup"] floating enable, move position center, bord
 
 # Editor de anotaciones satty siempre flotante y centrado
 for_window [app_id="com.gabm.satty"] floating enable, move position center, border pixel 2
+
+# Terminal con pestañas (Super+Shift+Enter): borde más grueso para distinguirlo
+for_window [app_id="foot-tmux"] border pixel 4
 
 # Sin barra de titulo (waybar ya muestra el titulo de la ventana), borde fino
 default_border pixel 2

@@ -1,0 +1,261 @@
+#compdef proton-drive
+# Autocompletado zsh para la CLI oficial de Proton Drive (proton-drive 0.8.0).
+# Completa grupos, comandos, opciones, valores de las opciones y rutas remotas
+# de Drive (consultando `proton-drive fs list --json`, con cache de 2 minutos).
+# Se admiten abreviaturas como hace la CLI: "fs up" = "filesystem upload".
+
+zmodload -F zsh/datetime p:EPOCHSECONDS 2>/dev/null
+
+typeset -gA _pd_cache _pd_cache_time
+typeset -g  _pd_cache_ttl=120
+typeset -ga _pd_sections=(my-files devices shared-by-me shared-with-me trash
+                          albums photos photos-shared-by-me photos-shared-with-me
+                          photos-trash)
+
+# Lista una carpeta remota: una entrada por linea, las carpetas acaban en "/"
+(( $+functions[_pd_ls] )) ||
+_pd_ls() {
+  local dir=$1
+  if [[ -n ${_pd_cache[$dir]+x} ]] &&
+     (( EPOCHSECONDS - ${_pd_cache_time[$dir]:-0} < _pd_cache_ttl )); then
+    print -r -- "${_pd_cache[$dir]}"
+    return
+  fi
+  local out
+  out=$(proton-drive filesystem list "$dir" --json 2>/dev/null | jq -r '
+    .[] | select(.name.ok) | .name.value
+        + (if .type == "folder" or .type == "album" then "/" else "" end)
+  ' 2>/dev/null) || return 1
+  _pd_cache[$dir]=$out
+  _pd_cache_time[$dir]=$EPOCHSECONDS
+  print -r -- "$out"
+}
+
+# Rutas remotas: /my-files/..., /albums/..., etc.
+(( $+functions[_pd_remote] )) ||
+_pd_remote() {
+  local expl
+  # Primer nivel: secciones fijas
+  if [[ $PREFIX != /*/* ]]; then
+    [[ -z $PREFIX || $PREFIX == /* ]] || return 1
+    _wanted sections expl 'sección de Drive' \
+      compadd -S / -q -- /${^_pd_sections}
+    return
+  fi
+  local dir=${(Q)PREFIX%/*}
+  local sec=${${dir#/}%%/*}
+  (( ${_pd_sections[(Ie)$sec]} )) || return 1
+
+  local -a entries dirs files
+  entries=(${(f)"$(_pd_ls $dir)"})
+  local e
+  for e in $entries; do
+    [[ $e == */ ]] && dirs+=(${e%/}) || files+=($e)
+  done
+  compset -P '*/'
+  local ret=1
+  _wanted folders expl 'carpeta de Drive' compadd -S / -q -- $dirs && ret=0
+  _wanted files expl 'archivo de Drive' compadd -- $files && ret=0
+  return ret
+}
+
+(( $+functions[_pd_local_or_remote] )) ||
+_pd_local_or_remote() {
+  _alternative 'local:archivo local:_files' 'remote:ruta de Drive:_pd_remote'
+}
+
+(( $+functions[_pd_remote_or_localdir] )) ||
+_pd_remote_or_localdir() {
+  _alternative 'remote:ruta de Drive:_pd_remote' 'local:carpeta local:_files -/'
+}
+
+# Resuelve una abreviatura unica ("fs" -> filesystem, "up" -> upload)
+(( $+functions[_pd_resolve] )) ||
+_pd_resolve() {
+  local word=$1; shift
+  local -a hits
+  local c
+  for c in "$@"; do
+    [[ $c == $word ]] && { REPLY=$c; return 0 }
+    [[ $c == ${word}* ]] && hits+=($c)
+  done
+  # alias que la propia CLI documenta
+  [[ $word == fs ]] && hits=(filesystem)
+  (( $#hits == 1 )) && { REPLY=$hits[1]; return 0 }
+  return 1
+}
+
+_proton-drive() {
+  local curcontext=$curcontext state line ret=1
+  local -a gen=(
+    '(- *)'{-h,--help}'[mostrar ayuda]'
+    '(-j --json)'{-j,--json}'[salida en JSON]'
+    '(-v --verbose)'{-v,--verbose}'[salida detallada]'
+  )
+  local -A cmds=(
+    auth       'login logout'
+    filesystem 'list info create-folder upload download rename copy move trash restore delete empty-trash'
+    sharing    'status invite leave remove set-url remove-url'
+    invitation 'list accept reject'
+    album      'list create update delete photos add-photo remove-photo'
+    photo      'timeline upload download'
+  )
+
+  _arguments -C $gen '1:grupo:->group' '*:: :->rest' && return 0
+
+  case $state in
+    group)
+      local -a groups=(
+        'auth:iniciar o cerrar sesión'
+        'filesystem:archivos y carpetas (alias fs)'
+        'sharing:compartir y enlaces públicos'
+        'invitation:invitaciones recibidas'
+        'album:álbumes de Proton Photos'
+        'photo:fotos (timeline, subir, descargar)'
+      )
+      _describe -t groups 'grupo' groups && ret=0
+      ;;
+    rest)
+      local REPLY group cmd
+      _pd_resolve $words[1] ${(k)cmds} || return 1
+      group=$REPLY
+      if (( CURRENT == 2 )); then
+        local -a sub
+        case $group in
+          auth) sub=('login:iniciar sesión' 'logout:cerrar sesión') ;;
+          filesystem) sub=(
+            'list:listar una carpeta (/ para ver las secciones)'
+            'info:metadatos completos de un elemento'
+            'create-folder:crear carpeta'
+            'upload:subir archivos y carpetas'
+            'download:descargar archivos y carpetas'
+            'rename:renombrar'
+            'copy:copiar'
+            'move:mover'
+            'trash:mandar a la papelera'
+            'restore:restaurar de la papelera'
+            'delete:borrar definitivamente (solo desde la papelera)'
+            'empty-trash:vaciar /trash'
+          ) ;;
+          sharing) sub=(
+            'status:miembros, invitaciones y enlace público'
+            'invite:invitar por email'
+            'leave:abandonar algo compartido contigo'
+            'remove:quitar acceso a usuarios'
+            'set-url:crear o cambiar el enlace público'
+            'remove-url:quitar el enlace público'
+          ) ;;
+          invitation) sub=(
+            'list:invitaciones pendientes'
+            'accept:aceptar invitación'
+            'reject:rechazar invitación'
+          ) ;;
+          album) sub=(
+            'list:listar álbumes'
+            'create:crear álbum'
+            'update:renombrar o cambiar portada'
+            'delete:borrar álbum'
+            'photos:fotos de un álbum'
+            'add-photo:añadir fotos al álbum'
+            'remove-photo:quitar fotos del álbum'
+          ) ;;
+          photo) sub=(
+            'timeline:listar todas las fotos'
+            'upload:subir fotos a My Photos'
+            'download:descargar fotos'
+          ) ;;
+        esac
+        _describe -t commands "comando de $group" sub && return 0
+        return 1
+      fi
+
+      _pd_resolve $words[2] ${=cmds[$group]} || return 1
+      cmd=$REPLY
+      shift words; (( CURRENT-- ))
+      curcontext="${curcontext%:*:*}:proton-drive-$group-$cmd:"
+
+      case "$group $cmd" in
+        'auth '*|'filesystem empty-trash'|'invitation list'|'album list')
+          _arguments $gen && ret=0 ;;
+        'filesystem list')
+          _arguments $gen \
+            '(-t --type)'{-t+,--type=}'[filtrar por tipo]:tipo:(file folder album photo)' \
+            '1:ruta de Drive:_pd_remote' && ret=0 ;;
+        'filesystem info'|'sharing status'|'sharing leave'|'sharing remove-url')
+          _arguments $gen '1:ruta de Drive:_pd_remote' && ret=0 ;;
+        'filesystem create-folder')
+          _arguments $gen '1:carpeta padre:_pd_remote' '2:nombre de la carpeta: ' && ret=0 ;;
+        'filesystem rename')
+          _arguments $gen '1:ruta de Drive:_pd_remote' '2:nuevo nombre: ' && ret=0 ;;
+        'filesystem upload')
+          _arguments $gen \
+            '(-f --file-conflict-strategy)'{-f+,--file-conflict-strategy=}'[si el archivo ya existe]:estrategia:(create-new-revision rename replace skip)' \
+            '(-d --folder-conflict-strategy)'{-d+,--folder-conflict-strategy=}'[si la carpeta ya existe]:estrategia:(merge rename replace skip)' \
+            '(-t --skip-thumbnails)'{-t,--skip-thumbnails}'[no generar miniaturas]' \
+            '*:archivos locales y carpeta destino en Drive:_pd_local_or_remote' && ret=0 ;;
+        'filesystem download')
+          _arguments $gen \
+            '(-f --file-conflict-strategy)'{-f+,--file-conflict-strategy=}'[si el archivo ya existe]:estrategia:(rename remove skip)' \
+            '(-d --folder-conflict-strategy)'{-d+,--folder-conflict-strategy=}'[si la carpeta ya existe]:estrategia:(merge rename remove skip)' \
+            '*:rutas de Drive y carpeta local:_pd_remote_or_localdir' && ret=0 ;;
+        'filesystem copy')
+          _arguments $gen \
+            '(-n --name)'{-n+,--name=}'[nombre de la copia]:nombre: ' \
+            '*:ruta de Drive:_pd_remote' && ret=0 ;;
+        'filesystem move'|'filesystem trash'|'filesystem restore'|'filesystem delete')
+          _arguments $gen '*:ruta de Drive:_pd_remote' && ret=0 ;;
+        'sharing invite')
+          _arguments $gen \
+            '*'{-u+,--user=}'[email del usuario a invitar]:email: ' \
+            '(-r --role)'{-r+,--role=}'[rol]:rol:(viewer editor admin)' \
+            '(-m --message)'{-m+,--message=}'[mensaje de la invitación]:mensaje: ' \
+            '(-n --include-node-name)'{-n,--include-node-name}'[incluir el nombre en el email]' \
+            '1:ruta de Drive:_pd_remote' && ret=0 ;;
+        'sharing remove')
+          _arguments $gen \
+            '*'{-e+,--email=}'[email del usuario a quitar]:email: ' \
+            '(-a --everyone)'{-a,--everyone}'[quitar acceso a todos]' \
+            '1:ruta de Drive:_pd_remote' && ret=0 ;;
+        'sharing set-url')
+          _arguments $gen \
+            '--role=[rol del enlace]:rol:(viewer editor)' \
+            '--password=[contraseña propia para el enlace]:contraseña: ' \
+            '--expiration=[caducidad (AAAA-MM-DD)]:fecha: ' \
+            '1:ruta de Drive:_pd_remote' && ret=0 ;;
+        'invitation accept'|'invitation reject')
+          _arguments $gen '1:UID (ver invitation list): ' && ret=0 ;;
+        'album create')
+          _arguments $gen '1:nombre del álbum: ' && ret=0 ;;
+        'album update')
+          _arguments $gen \
+            '(-n --name)'{-n+,--name=}'[nuevo nombre]:nombre: ' \
+            '(-c --cover-photo-uid)'{-c+,--cover-photo-uid=}'[UID de la foto de portada]:UID: ' \
+            '1:álbum:_pd_remote' && ret=0 ;;
+        'album delete')
+          _arguments $gen \
+            '(-f --force)'{-f,--force}'[no pedir confirmación]' \
+            '(-s --save)'{-s,--save}'[conservar las fotos]' \
+            '1:álbum:_pd_remote' && ret=0 ;;
+        'album photos')
+          _arguments $gen \
+            '(-d --load-details)'{-d,--load-details}'[cargar detalles]' \
+            '1:álbum:_pd_remote' && ret=0 ;;
+        'album add-photo'|'album remove-photo')
+          _arguments $gen '1:álbum:_pd_remote' '*:foto:_pd_remote' && ret=0 ;;
+        'photo timeline')
+          _arguments $gen '(-d --load-details)'{-d,--load-details}'[cargar detalles]' && ret=0 ;;
+        'photo upload')
+          _arguments $gen \
+            '(-c --conflict-strategy)'{-c+,--conflict-strategy=}'[si la foto ya existe]:estrategia:(rename skip)' \
+            '*:foto o carpeta local:_files' && ret=0 ;;
+        'photo download')
+          _arguments $gen \
+            '(-c --conflict-strategy)'{-c+,--conflict-strategy=}'[si la foto ya existe]:estrategia:(rename remove skip)' \
+            '*:fotos de Drive y carpeta local:_pd_remote_or_localdir' && ret=0 ;;
+      esac
+      ;;
+  esac
+  return ret
+}
+
+_proton-drive "$@"

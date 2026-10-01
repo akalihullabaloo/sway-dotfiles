@@ -1,6 +1,7 @@
 # Cabecera al abrir foot: fastfetch (config en ~/.config/fastfetch/config.jsonc).
 # Va antes del instant prompt de p10k para que no avise de salida en consola.
-# No sale en tmux, ssh ni en un zsh lanzado dentro de otro.
+# No sale en ssh ni en un zsh lanzado dentro de otro; en tmux solo en el
+# primer panel de una sesión nueva (no en pestañas ni divisiones).
 # El color de acento lo genera ~/.config/sway/scripts/theme.sh (Super+Alt+T).
 ff() {
   local f=~/.config/fastfetch/accent
@@ -8,7 +9,9 @@ ff() {
   [[ -r $f ]] && opts=(--color "$(<$f)")
   fastfetch "${opts[@]}" "$@"
 }
-if [[ $TERM == foot* && -z $TMUX && -z $SSH_CONNECTION && -z $_HEADER_SHOWN ]] \
+if [[ ( $TERM == foot* && -z $TMUX ||
+        -n $TMUX && $(tmux display -p '#{session_windows}#{window_panes}' 2>/dev/null) == 11 ) &&
+      -z $SSH_CONNECTION && -z $_HEADER_SHOWN ]] \
    && (( $+commands[fastfetch] )); then
   export _HEADER_SHOWN=1
   ff
@@ -30,6 +33,8 @@ setopt AUTO_CD
 
 # Mostrar la cabecera de nuevo cuando se quiera: ff (funcion definida arriba)
 
+# Completados propios (~/.zfunc, p.ej. _proton-drive)
+fpath=(~/.zfunc $fpath)
 autoload -Uz compinit
 compinit
 

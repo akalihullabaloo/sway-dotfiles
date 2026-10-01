@@ -5,7 +5,7 @@
 #   restore -> se usa al arrancar Sway; pone el ultimo fondo elegido.
 #              Si Azote guardo un fondo despues (~/.azotebg mas reciente), respeta ese.
 
-DIR="$HOME/Imágenes/Fondos"
+DIR="${WALLPAPER_DIR:-$HOME/Imágenes/Fondos}"   # otra carpeta: WALLPAPER_DIR=/ruta
 STATE="$HOME/.local/state/wallpaper-current"
 AZOTE="$HOME/.azotebg"
 FALLBACK="$HOME/.local/share/azote/sample/azote-wallpaper2.png"

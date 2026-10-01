@@ -2,14 +2,30 @@
 <actions>
 <action>
 	<icon>utilities-terminal</icon>
-	<name>Open Terminal Here</name>
+	<name>Abrir terminal aquí</name>
 	<submenu></submenu>
 	<unique-id>1787232008861191-1</unique-id>
-	<command>exo-open --working-directory %f --launch TerminalEmulator</command>
-	<description>Example for a custom action</description>
+	<command>foot --working-directory=%f</command>
+	<description>Abre foot en esta carpeta</description>
 	<range></range>
 	<patterns>*</patterns>
 	<startup-notify/>
 	<directories/>
+</action>
+<action>
+	<icon>security-high</icon>
+	<name>Analizar con ClamAV</name>
+	<submenu></submenu>
+	<unique-id>1790778000000000-1</unique-id>
+	<command>foot --title=ClamAV bash -c 'echo "Cargando firmas (unos 20 s)..."; clamscan -r -i "$@"; read -rp "Pulsa Enter para cerrar"' _ %F</command>
+	<description>Analiza con ClamAV los archivos o carpetas seleccionados</description>
+	<range></range>
+	<patterns>*</patterns>
+	<directories/>
+	<audio-files/>
+	<image-files/>
+	<other-files/>
+	<text-files/>
+	<video-files/>
 </action>
 </actions>

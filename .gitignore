@@ -23,3 +23,7 @@ dunst/.config/dunst/dunstrc.d/
 
 # swaync: config.json se genera (plantilla config.base.json + tiempo + fecha)
 swaync/.config/swaync/config.json
+tmux/.config/tmux/colors.conf
+
+# Caché de Python (plugins de ranger)
+__pycache__/

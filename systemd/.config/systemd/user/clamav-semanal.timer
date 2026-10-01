@@ -1,0 +1,10 @@
+[Unit]
+Description=Analisis semanal de Descargas con ClamAV: lunes a las 12:00 (o al iniciar sesion si no estaba encendido)
+
+[Timer]
+OnCalendar=Mon *-*-* 12:00:00
+Persistent=true
+RandomizedDelaySec=10min
+
+[Install]
+WantedBy=timers.target

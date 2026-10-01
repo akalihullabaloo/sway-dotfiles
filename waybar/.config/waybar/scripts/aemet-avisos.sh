@@ -65,9 +65,23 @@ fi
 # Si la peticion falla pero ya habia una cache previa, se deja tal cual
 # (mejor mostrar el ultimo estado conocido que borrarlo).
 
+# Icono (Font Awesome) del fenomeno del aviso mas grave; el color segun el
+# nivel lo pone style.css con la clase (.amarillo/.naranja/.rojo).
 jq -c '
-  {verde: "", amarillo: "🟨", naranja: "🟧", rojo: "🟥", desconocido: ""} as $icons
-  | ($icons[.nivel] // "") as $icon
+  def fa_icon:
+    if   test("lluvia")      then "\uf740"   # cloud-showers-heavy
+    elif test("tormenta")    then "\uf76c"   # cloud-bolt
+    elif test("viento|galerna|rissaga") then "\uf72e"   # wind
+    elif test("nev|nieve|alud|deshielo") then "\uf2dc"  # snowflake
+    elif test("máxima")      then "\uf769"   # temperature-high
+    elif test("mínima")      then "\uf76b"   # temperature-low
+    elif test("costero")     then "\uf773"   # water
+    elif test("niebla|polvo") then "\uf75f"  # smog
+    else "\uf071" end;                        # triangle-exclamation
+  .nivel as $n
+  | (if (.avisos | length) == 0 then ""
+     else ([.avisos[] | select(.nivel == $n)][0].evento // "" | ascii_downcase | fa_icon)
+     end) as $icon
   | {
       text: $icon,
       class: .nivel,

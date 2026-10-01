@@ -79,7 +79,7 @@
     "custom/keybinds": {
         "format": "",
         "tooltip-format": "Atajos de teclado (clic para ver)",
-        "on-click": "foot --app-id=keybinds-popup --title='Atajos de teclado' -e less -R $HOME/.config/waybar/keybindings.txt"
+        "on-click": "$HOME/.config/sway/scripts/keybinds.sh"
     },
     // Oculto en la barra: se sigue ejecutando solo para alimentar el boton
     // del tiempo del panel de swaync (weather.sh -> weather-button.sh).
@@ -357,8 +357,9 @@
         "exec": "$HOME/.config/waybar/scripts/updates.sh",
         "return-type": "json",
         "interval": 1800,
+        "signal": 9,
         "tooltip": true,
-        "on-click": "foot -e sudo dnf upgrade"
+        "on-click": "foot -e sh -c 'sudo dnf upgrade --refresh; pkill -RTMIN+9 waybar; echo; read -p \"Pulsa Enter para cerrar...\" _'"
     },
     "custom/media": {
         "format": "{icon} {text}",

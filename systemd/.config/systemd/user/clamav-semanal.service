@@ -1,0 +1,8 @@
+[Unit]
+Description=Analisis semanal de Descargas con ClamAV
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/clamav-semanal.sh
+Nice=19
+IOSchedulingClass=idle

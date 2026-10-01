@@ -78,6 +78,12 @@ printf '[colors-dark]\ncursor=0d0d0d %s\nregular5=%s\nbright5=%s\n' \
 
 printf '38;2;%s\n' "$rgb" > "$C/fastfetch/accent"
 
+# tmux: copia las líneas con el naranja por defecto de tmux.conf cambiando el color
+{
+    echo "# Generado por theme.sh ($NAME). No editar: se sobrescribe al cambiar de tema."
+    grep -i '#df6124' "$C/tmux/tmux.conf" | grep -v '^#' | sed "s/#df6124/$ACCENT/gI"
+} > "$C/tmux/colors.conf"
+
 mkdir -p "$C/dunst/dunstrc.d"
 printf '[global]\n    frame_color = "%s"\n' "$ACCENT" > "$C/dunst/dunstrc.d/99-theme.conf"
 
@@ -100,6 +106,7 @@ if pgrep -xu "$USER" eww >/dev/null; then
         eww open desktop-info >/dev/null 2>&1
     ) &
 fi
+tmux source-file ~/.config/tmux/tmux.conf 2>/dev/null
 pgrep -xu "$USER" dunst   >/dev/null && dunstctl reload >/dev/null 2>&1
 
 [ "$1" != "--current" ] && notify-send -a "Tema" -t 2000 \
