@@ -87,6 +87,18 @@ printf '38;2;%s\n' "$rgb" > "$C/fastfetch/accent"
 mkdir -p "$C/dunst/dunstrc.d"
 printf '[global]\n    frame_color = "%s"\n' "$ACCENT" > "$C/dunst/dunstrc.d/99-theme.conf"
 
+# cava: base (config.base) + degradado de abajo arriba: acento oscuro -> acento -> variante clara
+if [ -f "$C/cava/config.base" ]; then
+    dark=$(printf '#%02x%02x%02x' $((16#${hex:0:2} * 55 / 100)) $((16#${hex:2:2} * 55 / 100)) $((16#${hex:4:2} * 55 / 100)))
+    {
+        echo "# Generado por theme.sh ($NAME). No editar: edita config.base."
+        cat "$C/cava/config.base"
+        printf "\n[color]\nbackground = '#0d0d0d'\ngradient = 1\ngradient_count = 3\n"
+        printf "gradient_color_1 = '%s'\ngradient_color_2 = '%s'\ngradient_color_3 = '%s'\n" \
+            "$dark" "$ACCENT" "$ACCENT_BRIGHT"
+    } > "$C/cava/config"
+fi
+
 mkdir -p "$(dirname "$STATE")"
 echo "$name" > "$STATE"
 
@@ -108,6 +120,7 @@ if pgrep -xu "$USER" eww >/dev/null; then
 fi
 tmux source-file ~/.config/tmux/tmux.conf 2>/dev/null
 pgrep -xu "$USER" dunst   >/dev/null && dunstctl reload >/dev/null 2>&1
+pkill -USR1 -xu "$USER" cava 2>/dev/null   # cava relee su config con SIGUSR1
 
 [ "$1" != "--current" ] && notify-send -a "Tema" -t 2000 \
     -h string:x-canonical-private-synchronous:theme "Tema: $NAME" "Terminales nuevas usarán el color nuevo"

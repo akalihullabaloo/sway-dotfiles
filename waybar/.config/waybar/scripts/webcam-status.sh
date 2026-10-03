@@ -8,5 +8,5 @@ icon=$''
 if fuser /dev/video0 /dev/video1 >/dev/null 2>&1; then
     printf '{"text":"%s","class":"active","tooltip":"Webcam en uso"}\n' "$icon"
 else
-    printf '{"text":"%s","class":"inactive","tooltip":"Webcam libre"}\n' "$icon"
+    printf '{"text":"","class":"inactive"}\n'
 fi

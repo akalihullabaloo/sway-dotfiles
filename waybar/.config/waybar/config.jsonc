@@ -16,32 +16,26 @@
         "sway/workspaces",
         "sway/mode",
         "sway/scratchpad",
-        "custom/mpris-marquee"
+        "custom/mpris-marquee",
+        "custom/cava"
     ],
     "modules-center": [
         "sway/window"
     ],
     "modules-right": [
-        "custom/notifications",
-        "idle_inhibitor",
-        "power-profiles-daemon",
-        "custom/separator",
         "custom/updates",
         "cpu",
         "memory",
         "temperature",
-        "custom/separator",
-        "pulseaudio",
-        "custom/mic",
+        "custom/protonvpn",
         "custom/webcam",
-        "custom/separator",
-        "sway/language",
+        "custom/mic",
+        "pulseaudio",
         "custom/battery",
-        "custom/separator",
         "custom/festivo",
         "clock",
-        "custom/separator",
-        "tray"
+        "group/extras",
+        "custom/notifications"
     ],
     "custom/mpris-marquee": {
         "exec": "$HOME/.config/waybar/scripts/mpris-marquee.sh",
@@ -50,6 +44,15 @@
         "on-click": "playerctl play-pause",
         "on-click-middle": "playerctl previous",
         "on-click-right": "playerctl next"
+    },
+    // Minivisualizador de audio; oculto en silencio. Clic = ventana grande (Super+M)
+    "custom/cava": {
+        "exec": "$HOME/.config/waybar/scripts/cava-bars.sh",
+        "return-type": "json",
+        "tooltip": true,
+        // Clic derecho: siguiente estilo (puntos, braille, huecos, estrellas...)
+        "on-click-right": "$HOME/.config/waybar/scripts/cava-bars.sh next",
+        "on-click": "swaymsg '[app_id=\"cava-popup\"] kill' || foot --app-id cava-popup -o colors-dark.alpha=1.0 cava"
     },
     "custom/notifications": {
         "exec": "$HOME/.config/waybar/scripts/swaync-status.sh",
@@ -71,6 +74,26 @@
         "on-click": "swaync-client -t -sw",
         "on-click-right": "swaync-client -d -sw",
         "on-click-middle": "swaync-client -C -sw"
+    },
+    // Cajón: solo se ve el icono "⋯"; al pasar el ratón se despliega hacia la izquierda.
+    "group/extras": {
+        "orientation": "inherit",
+        "drawer": {
+            "transition-duration": 300,
+            "transition-left-to-right": false,
+            "children-class": "extras-child"
+        },
+        "modules": [
+            "custom/extras-handle",
+            "idle_inhibitor",
+            "power-profiles-daemon",
+            "sway/language",
+            "tray"
+        ]
+    },
+    "custom/extras-handle": {
+        "format": "\uf141",
+        "tooltip-format": "Más: inhibidor, energía, idioma, bandeja"
     },
     "custom/separator": {
         "format": "|",
@@ -244,7 +267,9 @@
         }
     },
     "cpu": {
-        "format": "",
+        "format": "",
+        "format-warning": "",
+        "format-critical": "",
         "tooltip-format": "CPU: {usage}%",
         "states": {
             "warning": 60,
@@ -252,7 +277,9 @@
         }
     },
     "memory": {
-        "format": "",
+        "format": "",
+        "format-warning": "",
+        "format-critical": "",
         "tooltip-format": "RAM: {percentage}%",
         "states": {
             "warning": 70,
@@ -262,8 +289,11 @@
     "temperature": {
         // "thermal-zone": 2,
         // "hwmon-path": "/sys/class/hwmon/hwmon2/temp1_input",
+        "warning-threshold": 65,
         "critical-threshold": 80,
-        "format": "{icon}",
+        "format": "",
+        "format-warning": "{icon}",
+        "format-critical": "{icon}",
         "tooltip-format": "{temperatureC}°C",
         "format-icons": ["", "", ""]
     },
@@ -324,20 +354,22 @@
         "tooltip": true
     },
     "pulseaudio": {
-        // Sin porcentaje: icono del dispositivo + mini barra de nivel (8 pasos).
-        // El porcentaje exacto queda en el tooltip.
+        // Solo icono: ondas según volumen (bajo/medio/alto), auriculares + barrita de nivel (5) con cascos
+        // y, al silenciar (rojo, ver CSS), cascos solos o altavoz con ✕. El % queda en el tooltip.
         "format": "{icon}",
         "format-bluetooth": "{icon}",
-        "format-muted": "\uf6a9",
-        "format-bluetooth-muted": "\uf6a9",
+        "format-muted": "{icon}",
+        "format-bluetooth-muted": "{icon}",
         "format-icons": {
-            "headphone": [" ▁", " ▂", " ▃", " ▄", " ▅", " ▆", " ▇", " █"],
-            "hands-free": [" ▁", " ▂", " ▃", " ▄", " ▅", " ▆", " ▇", " █"],
-            "headset": [" ▁", " ▂", " ▃", " ▄", " ▅", " ▆", " ▇", " █"],
-            "phone": [" ▁", " ▂", " ▃", " ▄", " ▅", " ▆", " ▇", " █"],
-            "portable": [" ▁", " ▂", " ▃", " ▄", " ▅", " ▆", " ▇", " █"],
-            "car": [" ▁", " ▂", " ▃", " ▄", " ▅", " ▆", " ▇", " █"],
-            "default": [" ▁", " ▂", " ▃", " ▄", " ▅", " ▆", " ▇", " █"]
+            "headphone": ["󰋋▁", "󰋋▂", "󰋋▄", "󰋋▆", "󰋋█"],
+            "hands-free": ["󰋋▁", "󰋋▂", "󰋋▄", "󰋋▆", "󰋋█"],
+            "headset": ["󰋋▁", "󰋋▂", "󰋋▄", "󰋋▆", "󰋋█"],
+            // Silenciado (rojo por CSS): cascos sin barrita; sin cascos, altavoz con ✕
+            "headphone-muted": "󰋋",
+            "hands-free-muted": "󰋋",
+            "headset-muted": "󰋋",
+            "default-muted": "\uf6a9",
+            "default": ["\uf026", "\uf027", "\uf028"]   // Font Awesome: 0, 1 y 3 ondas (estilo macOS)
         },
         "tooltip-format": "{desc}: {volume}%",
         "on-click": "pavucontrol"
@@ -351,6 +383,13 @@
         "exec": "$HOME/.config/waybar/scripts/webcam-status.sh",
         "return-type": "json",
         "interval": 2,
+        "tooltip": true
+    },
+    // Solo visible con Proton VPN conectada; su icono de bandeja sigue en el cajón.
+    "custom/protonvpn": {
+        "exec": "$HOME/.config/waybar/scripts/protonvpn-status.sh",
+        "return-type": "json",
+        "interval": 5,
         "tooltip": true
     },
     "custom/updates": {

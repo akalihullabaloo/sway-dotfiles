@@ -298,6 +298,11 @@ for_window [app_id="com.gabm.satty"] floating enable, move position center, bord
 # Terminal con pestañas (Super+Shift+Enter): borde más grueso para distinguirlo
 for_window [app_id="foot-tmux"] border pixel 4
 
+# Visualizador de audio (cava): Super+M lo abre en una ventana flotante;
+# si ya esta abierto, lo cierra (toggle). Capta todo lo que suena (PipeWire).
+bindsym $mod+m exec swaymsg '[app_id="cava-popup"] kill' || foot --app-id cava-popup -o colors-dark.alpha=1.0 cava
+for_window [app_id="cava-popup"] floating enable, resize set 900 300, move position center, border pixel 2
+
 # Sin barra de titulo (waybar ya muestra el titulo de la ventana), borde fino
 default_border pixel 2
 default_floating_border pixel 2

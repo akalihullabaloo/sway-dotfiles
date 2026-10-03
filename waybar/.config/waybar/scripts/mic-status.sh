@@ -8,7 +8,7 @@
 print_status() {
     muted=$(LC_ALL=C pactl get-source-mute @DEFAULT_SOURCE@ 2>/dev/null | awk '{print $2}')
     if [ "$muted" = "yes" ]; then
-        printf '{"text":"%s","class":"muted","tooltip":"Microfono silenciado"}\n' ""
+        printf '{"text":"","class":"muted"}\n'
     else
         printf '{"text":"%s","class":"unmuted","tooltip":"Microfono activo"}\n' ""
     fi

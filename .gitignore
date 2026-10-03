@@ -27,3 +27,6 @@ tmux/.config/tmux/colors.conf
 
 # Caché de Python (plugins de ranger)
 __pycache__/
+
+# cava: config se genera (config.base + colores del tema)
+cava/.config/cava/config

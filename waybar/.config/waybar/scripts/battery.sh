@@ -1,6 +1,6 @@
 #!/bin/bash
 # Modulo waybar de bateria con dos vistas, alternables con clic:
-#   icon  -> pila de Nerd Font por niveles (+ rayo aparte al cargar)
+#   icon  -> pila de Nerd Font por niveles + porcentaje (pila con rayo al cargar)
 #   meter -> pila + medidor de 5 segmentos + porcentaje
 # battery.sh toggle cambia la vista y refresca el modulo (signal 8).
 
@@ -23,7 +23,9 @@ mode=$(cat "$MODE_FILE" 2>/dev/null || echo icon)
 # Pila por niveles de 10 % (0..100 -> 11 glifos)
 levels=(󰂎 󰁺 󰁻 󰁼 󰁽 󰁾 󰁿 󰂀 󰂁 󰂂 󰁹)
 pila=${levels[$(( (cap + 5) / 10 ))]}
-bolt='<span font_family="JetBrainsMono Nerd Font" size="95%">󱐋</span>'
+# Pila con rayo dentro al cargar, mismos niveles
+charging=(󰢟 󰢜 󰂆 󰂇 󰂈 󰢝 󰂉 󰢞 󰂊 󰂋 󰂅)
+pila_carga=${charging[$(( (cap + 5) / 10 ))]}
 
 # Clase CSS: mismos nombres que el modulo battery original
 case "$status" in
@@ -52,8 +54,9 @@ if [ "$mode" = "meter" ]; then
     for i in 1 2 3 4 5; do [ "$i" -le "$filled" ] && meter+="■" || meter+="□"; done
     if [ "$cls" = charging ]; then text="󰂄 $meter $cap%"; else text="$pila $meter $cap%"; fi
 else
-    text="$pila"
-    [ "$cls" = charging ] && text="$pila$bolt"
+    icon=$pila
+    [ "$cls" = charging ] && icon=$pila_carga
+    text="$icon <span size='85%'>$cap%</span>"
 fi
 
 case "$status" in

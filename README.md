@@ -40,6 +40,18 @@ ranger with image previews in the terminal:
 
 ![ranger](capturas/ranger.jpg)
 
+Minimal bar: CPU, RAM and temperature only show up under load; the tray, idle inhibitor, power profile
+and keyboard layout live in a drawer (`⋯`, bottom strip: opened on hover). Next to the song, a mini audio
+visualizer (right click cycles 8 styles); `Super+M` opens the big one (cava) in the theme color, as in the
+desktop screenshot above:
+
+![Bar with the drawer closed and open](capturas/barra.jpg)
+
+Power menu (`Ctrl+Alt+Del`): the rabbit changes face with each option, and Shut down / Reboot / Log out ask
+for confirmation:
+
+![Power menu](capturas/menu-energia.jpg)
+
 ## Modules
 
 Each folder is a [GNU Stow](https://www.gnu.org/software/stow/) package and can be installed on its own.
@@ -47,13 +59,14 @@ Each folder is a [GNU Stow](https://www.gnu.org/software/stow/) package and can 
 | Module | Contents |
 |---|---|
 | `sway` | Sway config, keybindings, lock/idle, power menu, wallpaper script (`scripts/wallpaper.sh`) and the keybinding cheat sheet (`keybindings.conf`) |
-| `waybar` | Bar with custom modules (AEMET weather and warnings, network, battery, mic, webcam, updates) |
+| `waybar` | Minimal bar with custom modules (AEMET weather and warnings, battery, mic, webcam, updates, Proton VPN, mini audio visualizer) and a drawer for the rest |
 | `swaync` | Notification center with quick buttons, weather and calendar |
 | `eww` | Desktop info widget |
 | `rofi` | App launcher and wallpaper picker with thumbnails (`wallpaper.rasi`) |
 | `foot` | Terminal |
 | `tmux` | Tabs and splits for foot (`Alt` shortcuts, theme color) |
 | `ranger` | Terminal file manager with image (sixel, in foot) and video previews |
+| `cava` | Audio visualizer; its colors are generated from the theme (`config.base` + accent gradient) |
 | `fastfetch` | Terminal header (ASCII rabbit logo) |
 | `zsh` | `.zshrc`, Powerlevel10k theme (`.p10k.zsh`) and custom completions in `.zfunc/` (proton-drive) |
 | `gtklock` | Lock screen |
@@ -75,13 +88,14 @@ Each folder is a [GNU Stow](https://www.gnu.org/software/stow/) package and can 
 | `Super+N` | Notification panel |
 | `Super+Shift+Enter` | Terminal with tabs and splits (tmux) |
 | `Alt+T` / `Alt+V` / `Alt+S` | In tmux: new tab / split side by side / below |
+| `Super+M` | Audio visualizer (cava) |
 | `Ctrl+Alt+Del` | Power menu |
 
 ## Installation
 
 ```bash
 # Dependencies (Fedora)
-sudo dnf install sway swaybg swayidle waybar rofi swaync foot fastfetch gtklock thunar \
+sudo dnf install sway swaybg swayidle waybar rofi swaync foot fastfetch gtklock thunar cava \
     stow jq curl libxml2 ImageMagick playerctl brightnessctl pulseaudio-utils \
     grim slurp satty wl-mirror wl-clipboard libnotify pavucontrol zsh tmux ranger chafa \
     jetbrains-mono-fonts fontawesome-6-free-fonts papirus-icon-theme
@@ -92,7 +106,7 @@ sudo dnf install sway swaybg swayidle waybar rofi swaync foot fastfetch gtklock 
 
 git clone https://github.com/akalihullabaloo/sway-dotfiles.git ~/dotfiles
 cd ~/dotfiles
-stow sway waybar swaync eww rofi foot tmux ranger fastfetch zsh gtklock thunar themes   # or just the ones you want
+stow sway waybar swaync eww rofi foot tmux ranger cava fastfetch zsh gtklock thunar themes   # or just the ones you want
 stow --no-folding systemd   # systemd does not accept symlinked drop-in folders
 systemctl --user daemon-reload
 
@@ -111,7 +125,7 @@ somewhere else first.
 
 `Super+Alt+T` opens a picker with color swatches. The script `sway/.config/sway/scripts/theme.sh`
 generates a color file for each program (`colors.conf`, `colors.css`, `colors.rasi`…, not committed
-to the repo) and reloads sway, waybar, swaync and eww. New terminals use the new color.
+to the repo) and reloads sway, waybar, swaync, eww and cava. New terminals use the new color.
 
 Included themes: Orange, Amber, Red, Pink, Purple, Blue, Cyan, Mint, Matrix Green and Monochrome
 (named in Spanish in the picker). To create one, copy a file from `themes/.config/themes/` and change

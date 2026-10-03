@@ -144,8 +144,21 @@ button:hover {
 }
 
 #custom-mpris-marquee {
+    /* El ancho lo fija WIDTH (columnas) en scripts/mpris-marquee.sh; min-width
+       cubre el caso del japones/chino, cuya fuente es algo mas estrecha.
+       Si cambias WIDTH, ajusta esto (~7.2px por columna + icono). */
     min-width: 170px;
     font-family: 'JetBrains Mono', monospace;
+}
+
+/* Minivisualizador (cava): bloques ▁…█ con el color del tema */
+#custom-cava {
+    color: @accent;
+    padding: 0 1px;
+    margin-left: 6px;
+    /* Nerd Font: braille; Adwaita Mono: estrellas y corazones */
+    font-family: 'JetBrains Mono', 'JetBrainsMono Nerd Font', 'Adwaita Mono', monospace;
+    letter-spacing: 2px;   /* aire entre simbolos */
 }
 
 #custom-keybinds {
@@ -179,6 +192,7 @@ button:hover {
 #custom-battery {
     color: @fg;
     font-size: 15px;
+    margin-left: 6px;   /* separa la pila del icono de sonido */
 }
 
 #custom-battery.charging,
@@ -251,6 +265,9 @@ button:hover {
 
 #pulseaudio {
     color: @fg;
+    font-size: 15px;    /* mismo tamaño que la pila para alinear la línea base */
+    min-width: 22px;    /* ancho fijo: las ondas del icono no empujan ni pisan la pila */
+    padding: 0 2px 0 1px;
 }
 
 #pulseaudio.muted {
@@ -277,6 +294,16 @@ button:hover {
 
 #custom-webcam.active {
     color: @good;
+}
+
+/* Pastilla morada (color de Proton) con Proton VPN conectada */
+#custom-protonvpn.connected {
+    color: #a48bff;
+    background-color: alpha(#6d4aff, 0.2);
+    border: 1px solid alpha(#8b6dff, 0.7);
+    border-radius: 10px;
+    padding: 0 8px;
+    margin: 6px 4px;
 }
 
 #temperature {
@@ -380,4 +407,26 @@ tooltip label {
 
 #custom-festivo.manana {
     color: alpha(@fg, 0.7);
+}
+
+/* Sin separadores "|": los grupos se separan con margen */
+#pulseaudio,
+#clock,
+#custom-extras-handle,
+#custom-notifications {
+    margin-left: 12px;
+}
+
+/* Cajón (group/extras) */
+#custom-extras-handle {
+    color: alpha(@fg, 0.5);
+    padding: 0 4px;
+}
+
+#custom-extras-handle:hover {
+    color: @accent;
+}
+
+.extras-child {
+    margin-left: 6px;
 }

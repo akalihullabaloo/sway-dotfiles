@@ -8,7 +8,7 @@ output=$(LC_ALL=C timeout 120 dnf check-update --quiet 2>/dev/null)
 count=$(printf '%s\n' "$output" | grep -cE '^\S+\.\S+\s+\S+\s+\S+$')
 
 if [ "$count" -gt 0 ]; then
-    printf '{"text":"󰞦 %s","tooltip":"%s actualizaciones disponibles (dnf)","class":"has-updates"}\n' "$count" "$count"
+    printf '{"text":"󰓦 %s","tooltip":"%s actualizaciones disponibles (dnf)","class":"has-updates"}\n' "$count" "$count"
 else
     printf '{"text":""}\n'
 fi

@@ -37,6 +37,18 @@ ranger con previsualización de imágenes en el terminal:
 
 ![ranger](capturas/ranger.jpg)
 
+Barra minimalista: CPU, RAM y temperatura solo aparecen con carga alta; la bandeja, el inhibidor, el perfil
+de energía y el idioma van en un cajón (`⋯`, franja de abajo: abierto al pasar el ratón). Junto a la canción,
+un minivisualizador de audio (clic derecho cambia entre 8 estilos); `Super+M` abre el grande (cava) con el
+color del tema, como en la captura del escritorio de arriba:
+
+![Barra con el cajón cerrado y abierto](capturas/barra.jpg)
+
+Menú de energía (`Ctrl+Alt+Supr`): el conejo cambia de cara con cada opción, y Apagar / Reiniciar / Cerrar
+sesión piden confirmación:
+
+![Menú de energía](capturas/menu-energia.jpg)
+
 ## Módulos
 
 Cada carpeta es un paquete de [GNU Stow](https://www.gnu.org/software/stow/) y se puede instalar por separado.
@@ -44,13 +56,14 @@ Cada carpeta es un paquete de [GNU Stow](https://www.gnu.org/software/stow/) y s
 | Módulo | Qué contiene |
 |---|---|
 | `sway` | Config de Sway, atajos, bloqueo/idle, menú de energía, script de fondos (`scripts/wallpaper.sh`) y la chuleta de atajos (`keybindings.conf`) |
-| `waybar` | Barra con módulos propios (tiempo y avisos AEMET, red, batería, micro, webcam, actualizaciones) |
+| `waybar` | Barra minimalista con módulos propios (tiempo y avisos AEMET, batería, micro, webcam, actualizaciones, Proton VPN, minivisualizador de audio) y un cajón para el resto |
 | `swaync` | Centro de notificaciones con botones rápidos, tiempo y calendario |
 | `eww` | Widget de información en el escritorio |
 | `rofi` | Lanzador de aplicaciones y selector de fondos con miniaturas (`wallpaper.rasi`) |
 | `foot` | Terminal |
 | `tmux` | Pestañas y divisiones para foot (atajos con `Alt`, color del tema) |
 | `ranger` | Gestor de archivos en terminal con previsualización de imágenes (sixel, en foot) y de vídeos |
+| `cava` | Visualizador de audio; sus colores se generan desde el tema (`config.base` + degradado del acento) |
 | `fastfetch` | Cabecera del terminal (logo ASCII del conejo) |
 | `zsh` | `.zshrc`, tema Powerlevel10k (`.p10k.zsh`) y autocompletados propios en `.zfunc/` (proton-drive) |
 | `gtklock` | Pantalla de bloqueo |
@@ -72,13 +85,14 @@ Cada carpeta es un paquete de [GNU Stow](https://www.gnu.org/software/stow/) y s
 | `Super+N` | Panel de notificaciones |
 | `Super+Shift+Enter` | Terminal con pestañas y divisiones (tmux) |
 | `Alt+T` / `Alt+V` / `Alt+S` | En tmux: pestaña nueva / dividir al lado / debajo |
+| `Super+M` | Visualizador de audio (cava) |
 | `Ctrl+Alt+Supr` | Menú de energía |
 
 ## Instalación
 
 ```bash
 # Dependencias (Fedora)
-sudo dnf install sway swaybg swayidle waybar rofi swaync foot fastfetch gtklock thunar \
+sudo dnf install sway swaybg swayidle waybar rofi swaync foot fastfetch gtklock thunar cava \
     stow jq curl libxml2 ImageMagick playerctl brightnessctl pulseaudio-utils \
     grim slurp satty wl-mirror wl-clipboard libnotify pavucontrol zsh tmux ranger chafa \
     jetbrains-mono-fonts fontawesome-6-free-fonts papirus-icon-theme
@@ -89,7 +103,7 @@ sudo dnf install sway swaybg swayidle waybar rofi swaync foot fastfetch gtklock 
 
 git clone https://github.com/akalihullabaloo/sway-dotfiles.git ~/dotfiles
 cd ~/dotfiles
-stow sway waybar swaync eww rofi foot tmux ranger fastfetch zsh gtklock thunar themes   # o solo los que quieras
+stow sway waybar swaync eww rofi foot tmux ranger cava fastfetch zsh gtklock thunar themes   # o solo los que quieras
 stow --no-folding systemd   # systemd no admite carpetas de complementos enlazadas
 systemctl --user daemon-reload
 
@@ -107,7 +121,7 @@ Si ya existe alguno de esos archivos, `stow` avisa y no toca nada: muévelo ante
 
 `Super+Alt+T` abre un selector con muestras de color. El script `sway/.config/sway/scripts/theme.sh`
 genera un archivo de colores para cada programa (`colors.conf`, `colors.css`, `colors.rasi`…, que no
-se suben al repo) y recarga sway, waybar, swaync y eww. Las terminales nuevas usan el color nuevo.
+se suben al repo) y recarga sway, waybar, swaync, eww y cava. Las terminales nuevas usan el color nuevo.
 
 Temas incluidos: Naranja, Ámbar, Rojo, Rosa, Morado, Azul, Cian, Menta, Verde Matrix y Monocromo.
 Para crear uno, copia un archivo de `themes/.config/themes/` y cambia sus valores:

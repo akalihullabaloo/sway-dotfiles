@@ -1,0 +1,26 @@
+# Configuracion de cava (visualizador de audio, Super+M).
+# El archivo que lee cava (config) lo genera ~/.config/sway/scripts/theme.sh
+# juntando esta base con la seccion [color] del tema activo: edita AQUI.
+# Referencia completa: /usr/share/doc/cava o el config de ejemplo del proyecto.
+
+[general]
+# Barras finas con hueco (en ncurses las unidades son columnas de terminal)
+bar_width = 1
+bar_spacing = 1
+framerate = 60
+autosens = 1
+
+[input]
+# Capta todo lo que suena (Spotify, navegador...) via pipewire-pulse;
+# la cava de Fedora no trae el metodo "pipewire"
+method = pulse
+source = auto
+
+[output]
+method = ncurses
+# Estereo: graves en el centro, canal izquierdo y derecho reflejados
+channels = stereo
+
+[smoothing]
+# 0-100: mas alto = movimiento mas suave (por defecto 77)
+noise_reduction = 85
